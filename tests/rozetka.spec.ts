@@ -1,5 +1,6 @@
 import {test,expect} from '@playwright/test'
 
+//It would be a positive login case if I knew how to pass the captcha(
 test("logInFormCapchaError", async({page}) => {
     await page.goto("https://rozetka.com.ua/ua/");
     expect(page).toHaveTitle("Інтернет-магазин ROZETKA™: офіційний сайт найпопулярнішого онлайн-гіпермаркету в Україні");
@@ -19,6 +20,7 @@ test("logInFormCapchaError", async({page}) => {
    
 });
 
+//Check if the password is shown in the login form after clicking the "Show password" button 
 test("loginFormShowPasswordButton", async({page}) => {
     await page.goto("https://rozetka.com.ua/ua/");
     await page.click('.header-actions__item.header-actions__item--user');
@@ -36,6 +38,7 @@ test("loginFormShowPasswordButton", async({page}) => {
 
 });
 
+//Check if the number of visible products in the section is increased on the main page after clicking the "Show more" button 
 test("mainPageShowMoreButton", async({page}) => {
     await page.goto("https://rozetka.com.ua/ua/");
 
@@ -50,6 +53,7 @@ test("mainPageShowMoreButton", async({page}) => {
     
 });
 
+//Check if all required elements are presented in the product card on the catalog page
 test("productCardInCatalog", async({page}) => {
     await page.goto("https://rozetka.com.ua/ua/");
     await page.click('.menu-categories.menu-categories_type_main li:first-child');
@@ -58,7 +62,7 @@ test("productCardInCatalog", async({page}) => {
     await page.click('rz-dynamic-widgets rz-widget-producer+rz-widget-list .portal-grid.portal-grid_type_1_6 li:first-child');
     const catalogHeader = await page.textContent('div .ng-star-inserted h1');
     expect(catalogHeader).toEqual("Ноутбуки");
-//Розібратись як обрати всі div та a в .goods-tile__inner
+
     const productCard = await page.$$('.catalog-grid .catalog-grid__cell:first-child .goods-tile__inner>div, .catalog-grid__cell:first-child .goods-tile__inner>a, .catalog-grid__cell:first-child .goods-tile__inner>span');
     expect(productCard.length).toEqual(10);
 
