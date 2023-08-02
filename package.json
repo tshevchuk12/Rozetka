@@ -1,0 +1,16 @@
+{
+  "name": "rozetka",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "rozetka":"playwright test rozetka.spec.ts",
+    "rozetka-ui":"playwright test --ui rozetka.spec.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.36.2"
+  }
+}
