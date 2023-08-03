@@ -75,3 +75,49 @@ test("productCardInCatalog", async({page}) => {
     }));
     expect(productCardItems).toEqual(["goods-tile__label","goods-tile__actions","goods-tile__picture","goods-tile__colors","goods-tile__heading","goods-tile__rating","goods-tile__prices","goods-tile__availability","goods-tile__promo","goods-tile__hidden-holder"])
 });
+
+//check the validation of the Email field in the Registration form
+test("checkEmailFieldInRegistrationForm", async ({page}) => {
+    await page.goto("https://rozetka.com.ua/ua/");
+        
+    await page.click('.header-actions__item.header-actions__item--user');
+    const registrationButtonName = await page.innerText('.auth-modal__register-link.button.button--link');
+    expect(registrationButtonName).toEqual("Зареєструватися");
+
+    await page.click('.auth-modal__register-link.button.button--link');
+    const registrationFormHeader = await page.innerText('h3.modal__heading');
+    expect(registrationFormHeader).toEqual("Реєстрація");
+
+    const data = {
+        '#registerUserName': "Тетяна",
+        '#registerUserSurname': "Шевчук",
+        '#registerUserPhone': "09859860",
+        '#registerUserPassword': "12QAtest"
+    };
+
+    for (const [selector, value] of Object.entries(data)) {
+    await page.type(selector, value);
+    };
+
+    const arrayInvalidData = ["12@gmailcom", "@gmail.com", "куа@gmail.com", "12testgmail.com", "   ", " 12@gmailcom"];
+    
+    const errorMess = [];
+    for (const data of arrayInvalidData) {
+    await page.fill('#registerUserEmail', ''); // Очищаємо поле перед вставкою нового значення
+    await page.type('#registerUserEmail', data);
+    await page.click('.button.button--large.button--green.auth-modal__submit');
+    const errorMessageText = await page.innerText('.form__row.ng-star-inserted .validation-message.ng-star-inserted');
+    errorMess.push(errorMessageText);
+    }
+    expect(errorMess).toEqual(["Введіть свою ел. пошту", "Введіть свою ел. пошту", "Введіть свою ел. пошту", "Введіть свою ел. пошту", "Введіть свою ел. пошту", "Введіть свою ел. пошту"])
+   
+    // const errorMess = await Promise.all(arrayInvalidData.map(
+    //     async (data)=>{ 
+    //         await page.fill('#registerUserEmail', '');
+    //         await page.type('#registerUserEmail',data);
+    //         await page.click('.button.button--large.button--green.auth-modal__submit');
+    //         const errorMessageText = page.innerText('.form__row.ng-star-inserted .validation-message.ng-star-inserted');
+    //         return errorMessageText;
+    //         }));
+
+})
