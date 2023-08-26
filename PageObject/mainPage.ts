@@ -1,57 +1,47 @@
 import { ElementHandle,expect, Page } from "@playwright/test"
 import {mainPageSelectors} from "../Selectors/mainPageSelectors"
+import {createUtilities} from "../Utilities/Utility"
 
 const createMainPage = (page: Page) => {
+    const utility = createUtilities(page)
     const mainPage = {
         openMainPage: () => page.goto('https://rozetka.com.ua/ua/'),
-        loginForm: {
-            openLoginForm: () => page.click(mainPageSelectors.LOGINBUTTON),
-            getLoginFormHeaderText: () => page.textContent(mainPageSelectors.LOGINFORMHEADER), 
-            setLogin: async (email:string) => {
-                await page.click(mainPageSelectors.EMAILFIELD);
-                await page.type(mainPageSelectors.EMAILFIELD,email);
+        scrollMainPageDown:() => page.mouse.wheel(1688, 4786.080),
+
+        getProductSectionsList: () => page.$$(mainPageSelectors.PRODUCT_ELEMENTS_LIST),
+        
+        getFirstProductSectionElements: async() => {
+            const [firstSection]= await mainPage.getProductSectionsList(); 
+            const firstSectionElements = await firstSection.$$(mainPageSelectors.PRODUCT_ELEMENTS_IN_SECTION);
+            return firstSectionElements
+        },
+        showMoreButton: {
+            getFirstSectionButton: async() => {
+                const [firstSection]= await mainPage.getProductSectionsList(); 
+                const showMoreButton = await firstSection.$(mainPageSelectors.SHOW_MORE_BUTTON);
+                return showMoreButton
             },
-            setPassword: async (password:string) =>  {
-                await page.click(mainPageSelectors.PASSWORDFIELD);
-                await page.type(mainPageSelectors.PASSWORDFIELD, password);
+            getName: async() => {
+                const showMoreButton = await mainPage.showMoreButton.getFirstSectionButton()
+                const buttonName = await showMoreButton?.innerText();
+                return buttonName
             },
-            getPasswordStatus: () => page.getAttribute(mainPageSelectors.PASSWORDFIELD, 'type'),
-            clickPasswordToggleButton: () => page.click(mainPageSelectors.PASSWORDTOGGLEBUTTON)
+            click: async() => {
+                const showMoreButton = await mainPage.showMoreButton.getFirstSectionButton()
+                await showMoreButton?.click()
+            }
+            
         },
-        registrationForm: {
-            openRegistrationForm:  () => page.click(mainPageSelectors.REGISTRATIONBUTTON),
-            getRegistrationFormHeader: () => page.innerText(mainPageSelectors.REGISTRATIONFORMHEADER)
-         },
-        pressEnter: () => page.keyboard.press("Enter", {"delay":100}),
-        clickShowMoreButton: () => page.click(mainPageSelectors.SHOWMOREBUTTON),
-        getButtonName: () => page.textContent(mainPageSelectors.SHOWMOREBUTTON),
-        getProductElementsInSection: () => page.$$(mainPageSelectors.PRODUCTELEMENTSINSECTION),
-        getErrorText: {
-            captchaError: () => page.textContent(mainPageSelectors.CAPTCHAERRORTEXT)
-        },    
-        openCatalogPage: () => page.goto("https://rozetka.com.ua/ua/notebooks/c80004/"),
-        getProductCardLableFirstClassNameList: async() => {
-            const productLableItems = await page.$$(mainPageSelectors.PRODUCTLABLEITEMS);
-            const productCardLableClassNames = await Promise.all(productLableItems.map((card) => card.getAttribute("class")));
-            const firstClassNameList = productCardLableClassNames.map((className)=> className?.split(" ")[0]);
-            return firstClassNameList
-        },
-        insertDataInTheRegistrationForm: async (page:Page,userName:string, userSurname:string,userPhone:string, userPassword:string) => {
-            await page.type(mainPageSelectors.USERNAMEFIELD, userName);
-            await page.type(mainPageSelectors.USERSURNAMEFIELD, userSurname);
-            await page.type(mainPageSelectors.USERPHONEFIELD, userPhone);
-            await page.type(mainPageSelectors.USERPASSWORDFIELD, userPassword);
-        },
-        invalidEmailDataList: ["12@gmailcom", "@gmail.com", "куа@gmail.com", "12testgmail.com", "   ", " 12@gmailcom"],
-        checkEmailFieldValidation: async (invalidEmailDataList: string[]) => {
-            for (const data of invalidEmailDataList) {
-                await page.fill(mainPageSelectors.USEREMAILFIELD, ''); 
-                await page.type(mainPageSelectors.USEREMAILFIELD, data);
-                await page.click(mainPageSelectors.SUBMITREGISTRATIONBUTTON);
-                const errorMessageText = await page.innerText(mainPageSelectors.EMAILVALIDATIONERRORTEXT);
-                expect(errorMessageText).toEqual("Введіть свою ел. пошту")
-                }
-        }
+        getShowMoreButtonList: async() => {
+            const productSectionsList = await mainPage.getProductSectionsList();
+            const showMoreButtonList = await Promise.all(productSectionsList.map(async(showMoreButtonElement) => {
+            const showMoreButtonInSection = await showMoreButtonElement.$(mainPageSelectors.SHOW_MORE_BUTTON);
+            const buttonName = await showMoreButtonInSection?.innerText();
+            return buttonName
+            }))
+        return showMoreButtonList     
+        }        
+        
     }
 return mainPage
 }
