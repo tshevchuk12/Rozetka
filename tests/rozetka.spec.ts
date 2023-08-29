@@ -32,7 +32,7 @@ test("ShowPassword button displays a password", async({page}) => {
     await loginForm.openLoginForm();
 
     await loginForm.setPassword("test12");
-    //await mainPage.loginForm.clickPasswordToggleButton();
+    //await loginForm.clickPasswordToggleButton();
     const passwordStatusBefore = await loginForm.getPasswordStatus();
     
     if(passwordStatusBefore === 'password'){
@@ -151,3 +151,21 @@ test("Email field validation in the Registration form", async ({page}) => {
     await checkEmailFieldValidation(page,invalidEmailDataList);
     
 });
+
+//Parameterized test 
+const dataForSearch = [{text:"Lenovo",test:1}, {text:"Acer",test:2}, {text:"Nokia",test:3}, {text:"JBL",test:4}, {text:"LG",test:5}]
+
+dataForSearch.forEach((data) => {
+    test(`Search for ${data.test}`, async ({page})=>{
+        const mainPage = createMainPage(page);
+        await mainPage.openMainPage();
+        await page.click('.search-form .search-form__inner');
+        await page.type('.search-form .search-form__inner',data.text);
+        await page.keyboard.press("Enter", {"delay":100});
+        const searchPageHeader = await page.textContent('.search-heading.ng-star-inserted');
+        expect(searchPageHeader).toContain(`${data.text}`)
+        
+        //expect(searchPageHeader).toContain(` Результати пошуку «${data.text}»`)
+        
+    })
+})
