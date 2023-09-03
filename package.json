@@ -4,8 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "rozetka":"playwright test rozetka.spec.ts",
-    "rozetka-ui":"playwright test --ui rozetka.spec.ts"
+    "rozetka":"playwright test rozetka_MainPage.spec.ts rozetka_CatalogPage.spec.ts rozetka_LoginAndRegistrationForm.spec.ts rozetka_SearchPage.spec.ts rozetka_ComparisonPage.spec.ts",
+    "rozetka-ui":"playwright test --ui rozetka_MainPage.spec.ts rozetka_CatalogPage.spec.ts rozetka_LoginAndRegistrationForm.spec.ts rozetka_SearchPage.spec.ts rozetka_ComparisonPage.spec.ts",
+
+    "rozetka_MainPage":"playwright test rozetka_MainPage.spec.ts",
+    "rozetka_MainPage-ui":"playwright test --ui rozetka_MainPage.spec.ts",
+    "rozetka_CatalogPage":"playwright test rozetka_CatalogPage.spec.ts",
+    "rozetka_CatalogPage-ui":"playwright test --ui rozetka_CatalogPage.spec.ts",
+    "rozetka_LoginAndRegistrationForm":"playwright test rozetka_LoginAndRegistrationForm.spec.ts",
+    "rozetka_LoginAndRegistrationForm-ui":"playwright test --ui rozetka_LoginAndRegistrationForm.spec.ts",
+    "rozetka_ComparisonPage":"playwright test rozetka_ComparisonPage.spec.ts",
+    "rozetka_ComparisonPage-ui":"playwright test --ui rozetka_ComparisonPage.spec.ts",
+    "rozetka_SearchPage":"playwright test rozetka_SearchPage.spec.ts",
+    "rozetka_SearchPage-ui":"playwright test --ui rozetka_SearchPage.spec.ts"
   },
   "keywords": [],
   "author": "",

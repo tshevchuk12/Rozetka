@@ -1,5 +1,5 @@
 import { Page} from "@playwright/test";
-import { mainPageSelectors } from "../Selectors/mainPageSelectors";
+import { loginFormSelectors, registrationFormSelectors } from "../Selectors/loginAndRegistrationFormSelectors";
 import {createUtilities} from "../Utilities/Utility"
 
 const createLoginForm = (page : Page) => {
@@ -7,19 +7,19 @@ const createLoginForm = (page : Page) => {
     const loginForm ={   
         openLoginForm: async() => {
             await page.goto('https://rozetka.com.ua/ua/')
-            await page.click(mainPageSelectors.LOGIN_BUTTON)
+            await page.click(loginFormSelectors.LOGIN_BUTTON)
         },
-        getLoginFormHeaderText: () => page.textContent(mainPageSelectors.LOGIN_FORM_HEADER), 
+        getLoginFormHeaderText: () => page.textContent(loginFormSelectors.LOGIN_FORM_HEADER), 
         setLogin: async (email:string) => {
-            await utility.clearAndType(mainPageSelectors.EMAIL_FIELD,email)
+            await utility.clearAndType(loginFormSelectors.EMAIL_FIELD,email)
         },
         setPassword: async(password:string)=> {
-            await utility.clearAndType(mainPageSelectors.PASSWORD_FIELD,password) 
+            await utility.clearAndType(loginFormSelectors.PASSWORD_FIELD,password) 
         },
         getErrorText: {
-        captchaError: () => page.textContent(mainPageSelectors.CAPTCHA_ERROR_TEXT)
+        captchaError: () => page.textContent(loginFormSelectors.CAPTCHA_ERROR_TEXT)
         },
-        getPasswordStatus: () => page.getAttribute(mainPageSelectors.PASSWORD_FIELD, 'type'),
+        getPasswordStatus: () => page.getAttribute(loginFormSelectors.PASSWORD_FIELD, 'type'),
         isPasswordVisible : async () => {
             const statusText = await loginForm.getPasswordStatus();
                 if(statusText ==='password'){
@@ -29,7 +29,7 @@ const createLoginForm = (page : Page) => {
                 } else {
                     throw new Error ("Password status not found")
         }},
-        clickPasswordToggleButton: () => page.click(mainPageSelectors.PASSWORD_TOGGLE_BUTTON),
+        clickPasswordToggleButton: () => page.click(loginFormSelectors.PASSWORD_TOGGLE_BUTTON),
         togglePasswordVisibility: async(expectedStatus: boolean) =>{
             const status = await loginForm.isPasswordVisible();
                 if (status !== expectedStatus){
@@ -44,19 +44,19 @@ const createRegistrationForm = (page:Page) => {
     const registrationForm ={
         openRegistrationForm:  async() => {
             await page.goto('https://rozetka.com.ua/ua/'),
-            await page.click(mainPageSelectors.LOGIN_BUTTON),
-            await page.click(mainPageSelectors.REGISTRATION_BUTTON)
+            await page.click(loginFormSelectors.LOGIN_BUTTON),
+            await page.click(loginFormSelectors.REGISTRATION_BUTTON)
         },
-        getRegistrationFormHeader: () => page.innerText(mainPageSelectors.REGISTRATION_FORM_HEADER),  
+        getRegistrationFormHeader: () => page.innerText(registrationFormSelectors.REGISTRATION_FORM_HEADER),  
         insertDataIntoRegistrationForm: async (page:Page,userName:string, userSurname:string,userPhone:string, userPassword:string) => {
-            await utility.clearAndType(mainPageSelectors.USER_NAME_FIELD, userName);
-            await utility.clearAndType(mainPageSelectors.USER_SURNAME_FIELD, userSurname);
-            await utility.clearAndType(mainPageSelectors.USER_PHONE_FIELD, userPhone);
-            await utility.clearAndType(mainPageSelectors.USER_PASSWORD_FIELD, userPassword);
+            await utility.clearAndType(registrationFormSelectors.USER_NAME_FIELD, userName);
+            await utility.clearAndType(registrationFormSelectors.USER_SURNAME_FIELD, userSurname);
+            await utility.clearAndType(registrationFormSelectors.USER_PHONE_FIELD, userPhone);
+            await utility.clearAndType(registrationFormSelectors.USER_PASSWORD_FIELD, userPassword);
         },
         acceptEmail: async (emilToInsert:string) => {
-            await utility.clearAndType(mainPageSelectors.USER_EMAIL_FIELD, emilToInsert);
-            await page.click(mainPageSelectors.SUBMIT_REGISTRATION_BUTTON);
+            await utility.clearAndType(registrationFormSelectors.USER_EMAIL_FIELD, emilToInsert);
+            await page.click(registrationFormSelectors.SUBMIT_REGISTRATION_BUTTON);
         }}
     return registrationForm
 }
