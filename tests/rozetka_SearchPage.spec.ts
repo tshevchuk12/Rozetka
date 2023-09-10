@@ -15,10 +15,20 @@ dataForSearch.forEach((data) => {
         await page.keyboard.press("Enter", {"delay":100});
         const searchPageHeader = await searchPage.getSearchPageHeader()
 
-    
-        expect(searchPageHeader).toContain("Результати пошуку");
-        expect(searchPageHeader).toContain(`${data.text}`)
+        // expect(searchPageHeader).toContain("Результати пошуку");
+        // expect(searchPageHeader).toContain(`${data.text}`)
 
-        
+        const searchPageHeaderText = searchPageHeader?.replace(/\s/g, ' ')
+        const expectedText = `Результати пошуку «${data.text}»`
+        const expectedSearchPageHeaderText = expectedText?.replace(/\s/g, ' ')
+
+        expect(searchPageHeaderText?.trim()).toEqual(expectedSearchPageHeaderText)
+
+ 
+        const text = searchPageHeaderText?.trim()
+        console.log(text?.[text.length-1])
+        console.log(text?.charCodeAt((text.length-1))) 
+       
+  
     })
 })
