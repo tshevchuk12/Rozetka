@@ -18,14 +18,17 @@ test("ShowMore button increases visible products", async({page}) => {
       
 });
 
-test("Each product section contains a ShowMore button on the main page",async({page}) => {
+test.only("Each product section contains a ShowMore button on the main page",async({page}) => {
     const mainPage = createMainPage(page);
     
     await mainPage.openMainPage();
 
-    while((await mainPage.getProductSectionsList()).length != 10){
-        await mainPage.scrollMainPageDown();
-    }
+    // while((await mainPage.getProductSectionsList()).length != 10){
+    //     await mainPage.scrollMainPageDown();
+    // }
+
+    //Variant with recursion
+    await mainPage.scrollToLastElement(10);
 
     const productSectionsList = await mainPage.getProductSectionsList()
     expect(productSectionsList.length).toEqual(10);

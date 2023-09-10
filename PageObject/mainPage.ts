@@ -1,9 +1,7 @@
 import { ElementHandle,expect, Page } from "@playwright/test"
 import {mainPageSelectors} from "../Selectors/mainPageSelectors"
-import {createUtilities} from "../Utilities/Utility"
 
 const createMainPage = (page: Page) => {
-    const utility = createUtilities(page)
     const mainPage = {
         openMainPage: () => page.goto('https://rozetka.com.ua/ua/'),
         scrollMainPageDown:() => page.mouse.wheel(1688, 4786.080),
@@ -40,7 +38,14 @@ const createMainPage = (page: Page) => {
             return buttonName
             }))
         return showMoreButtonList     
-        }        
+        },  
+        scrollToLastElement:  async (expectedItemsLength:number) => {
+            const productElements = await mainPage.getProductSectionsList();
+        if (productElements.length !== expectedItemsLength){
+            await mainPage.scrollMainPageDown();
+            await mainPage.scrollToLastElement(expectedItemsLength)
+        }
+        }   
         
     }
 return mainPage
