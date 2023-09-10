@@ -21,3 +21,25 @@ test("Product card should contain all elements in catalog page", async({page}) =
     expect(firstClassNameList).toContain("goods-tile__hidden-holder")
     
 });
+
+//Check "show more" button on the Catalog page
+test("Show more button increases the quantity of goods on the Catalog page", async({page})=>{
+    const catalogPage = createCatalogPage(page);
+    await catalogPage.openCatalogPage();
+
+    const productsBefore = await catalogPage.getProductItemsList();
+    
+    // while((await catalogPage.getProductItems()).length < 200){
+    //     await page.waitForTimeout(3000)
+    //     await catalogPage.clickShowMoreButton()
+    // }
+
+    //Variant with recursion
+    await catalogPage.getExpectedGoodsQuantity(200)
+
+    const productsAfter = await catalogPage.getProductItemsList();
+    
+    expect(productsAfter.length).toBeGreaterThan(productsBefore.length)
+    console.log(productsAfter.length)
+
+})
