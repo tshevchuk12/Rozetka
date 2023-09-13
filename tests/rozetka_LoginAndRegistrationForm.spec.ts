@@ -1,12 +1,27 @@
 import {test, expect, Page} from '@playwright/test'
 import { createLoginForm } from '../PageObject/loginAndRegistrationForm'
 import { createRegistrationForm } from '../PageObject/loginAndRegistrationForm'
-import { registrationFormSelectors } from "../Selectors/loginAndRegistrationFormSelectors";
+import { registrationFormSelectors } from "../Selectors/loginAndRegistrationFormSelectors"
+import {utility} from "../Utilities/Utility"
+
+
+//Check utility with Element
+test.only("Check utility with Element", async ({page})=> {
+    const loginForm = createLoginForm(page);
+    await loginForm.openLoginForm();
+    const fields = await page.$$('.form__row input');
+    await utility.clearAndType(page, fields[0], "Text");
+    await page.keyboard.press("Enter", {"delay":100});
+    const errorText = await page.innerText('.error-message.ng-star-inserted')
+    expect(errorText).toEqual('Введено невірну адресу ел. пошти або номер телефону')
+
+
+})
+
 //It would be a positive login case if I knew how to pass the captcha(
     test("Captcha failed during login", async({page}) => {
         const loginForm = createLoginForm(page);
     
-        await loginForm.openLoginForm();
         expect(page).toHaveTitle("Інтернет-магазин ROZETKA™: офіційний сайт найпопулярнішого онлайн-гіпермаркету в Україні");
         
         await loginForm.openLoginForm();
