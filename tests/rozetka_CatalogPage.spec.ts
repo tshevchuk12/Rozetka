@@ -23,7 +23,7 @@ test("Product card should contain all elements in catalog page", async({page}) =
 });
 
 //Check "show more" button on the Catalog page
-test("Show more button increases the quantity of goods on the Catalog page", async({page})=>{
+test.only("Show more button increases the quantity of goods on the Catalog page", async({page})=>{
     const catalogPage = createCatalogPage(page);
     await catalogPage.openCatalogPage();
 
@@ -35,7 +35,10 @@ test("Show more button increases the quantity of goods on the Catalog page", asy
     // }
 
     //Variant with recursion
-    await catalogPage.getExpectedGoodsQuantity(200)
+    //await catalogPage.getExpectedGoodsQuantity(200)
+
+    //Variant with evaluate  
+    await catalogPage.getExpectedProductsQuantity(200)
 
     const productsAfter = await catalogPage.getProductItemsList();
     
