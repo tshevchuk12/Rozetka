@@ -1,5 +1,6 @@
 import {test,expect, Page, ElementHandle} from '@playwright/test'
 import { createMainPage } from '../PageObject/mainPage'
+import {mainPageSelectors} from "../Selectors/mainPageSelectors"
 
 //Check if the number of visible products in the section is increased on the main page after clicking the "Show more" button 
 test("ShowMore button increases visible products", async({page}) => {
@@ -18,7 +19,7 @@ test("ShowMore button increases visible products", async({page}) => {
       
 });
 
-test.only("Each product section contains a ShowMore button on the main page",async({page}) => {
+test("Each product section contains a ShowMore button on the main page",async({page}) => {
     const mainPage = createMainPage(page);
     
     await mainPage.openMainPage();
@@ -28,7 +29,10 @@ test.only("Each product section contains a ShowMore button on the main page",asy
     // }
 
     //Variant with recursion
-    await mainPage.scrollToLastElement(10);
+    //await mainPage.scrollToLastElement(10);
+       
+    //Variant with waitForFunction
+    await mainPage.scrollDown(mainPageSelectors.PRODUCT_ELEMENTS_LIST, 10);
 
     const productSectionsList = await mainPage.getProductSectionsList()
     expect(productSectionsList.length).toEqual(10);
@@ -40,4 +44,5 @@ test.only("Each product section contains a ShowMore button on the main page",asy
   });
 
 
-//test zoom in - перевірити кількість карток в рядку при різних масштабах сторінки
+//test zoom in. Check visibility of the page in a different browser scale
+

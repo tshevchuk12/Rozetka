@@ -44,8 +44,16 @@ const createMainPage = (page: Page) => {
         if (productElements.length !== expectedItemsLength){
             await mainPage.scrollMainPageDown();
             await mainPage.scrollToLastElement(expectedItemsLength)
+        }},
+
+        scrollDown: async (selector:any, length:any) => {
+            await page.waitForFunction(
+                ({ selector, length }) => {
+              let elem = document.querySelectorAll(selector);
+              window.scrollTo(0, document.body.scrollHeight);
+              return elem.length === length;
+              }, { selector, length })
         }
-        }   
         
     }
 return mainPage
